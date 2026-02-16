@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -7,7 +7,6 @@ import {
   faLocationDot,
   faPaperPlane,
   faCheck,
-  faTimes,
   faSpinner
 } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -47,15 +46,15 @@ const ContactMe = () => {
     }, 2000);
   };
 
-  // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 60 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
-  };
+//   // Animation variants
+//   const fadeInUp = {
+//     hidden: { opacity: 0, y: 60 },
+//     visible: {
+//       opacity: 1,
+//       y: 0,
+//       transition: { duration: 0.6, ease: "easeOut" }
+//     }
+//   };
 
   const fadeInLeft = {
     hidden: { opacity: 0, x: -60 },

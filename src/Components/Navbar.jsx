@@ -118,7 +118,7 @@ const Navbar = ({ navOpen }) => {
     },
     {
       label: 'Projects',
-      link: '#project',
+      link: '#projects',
       icon: 'work',
     },
     {

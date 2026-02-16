@@ -126,19 +126,21 @@ const BackgroundDigitalAnimation = () => {
 
     // Animation loop
     const interval = setInterval(() => {
-      setParticles(prev => prev.map(p => ({
-        ...p,
-        x: p.x + p.speedX,
-        y: p.y + p.speedY,
-        rotation: p.rotation + p.rotationSpeed,
-        // Wrap around edges
-        x: p.x > 100 ? 0 : p.x < 0 ? 100 : p.x,
-        y: p.y > 100 ? 0 : p.y < 0 ? 100 : p.y
-      })));
+      setParticles(prev => prev.map(p => {
+        const newX = p.x + p.speedX;
+        const newY = p.y + p.speedY;
+
+        return {
+          ...p,
+          x: newX > 100 ? 0 : newX < 0 ? 100 : newX,
+          y: newY > 100 ? 0 : newY < 0 ? 100 : newY,
+          rotation: p.rotation + p.rotationSpeed
+        };
+      }));
     }, 50);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [codeSnippets]);
 
   // Calculate connections between nearby particles
   useEffect(() => {
@@ -689,7 +691,7 @@ const Projects = () => {
       role: 'Flutter Developer',
       client: 'Systos Technology',
       timeline: 'Nov 2023 - Jan 2024',
-      image: '/images/shopping.png',
+      image: '/images/jobs.png',
       overview: {
         challenge: 'Create a job placement app with dynamic job listings and easy application process.',
         solution: 'Built with Flutter featuring dynamic job feed, filtering options, and seamless application flow.'
@@ -909,6 +911,7 @@ const Projects = () => {
 
         {/* Projects Grid */}
         <motion.section
+        id="projects"
           className="py-20"
           variants={staggerContainer}
           initial="initial"

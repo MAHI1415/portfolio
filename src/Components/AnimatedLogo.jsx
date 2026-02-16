@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const AnimatedLogo = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const [rotation, setRotation] = useState(0);
+  const [, setRotation] = useState(0);
 
   useEffect(() => {
     let interval;
