@@ -12,7 +12,7 @@ const ProfileCard = () => {
         <div className="relative mb-6">
           <div className="absolute inset-0 bg-gradient-to-r from-sky-500 to-purple-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
           <img
-             src={process.env.PUBLIC_URL + '/images/mahendra2.png'}
+             src={process.env.PUBLIC_URL + '/images/mahendra31.png'}
             alt="Mahendra Gurjar"
             className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full mx-auto object-cover border-4 border-white/10 ring-2 ring-sky-500/50"
           />

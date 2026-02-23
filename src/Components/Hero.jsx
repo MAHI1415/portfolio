@@ -244,7 +244,7 @@ const Hero = () => {
                   <span className="bg-gradient-to-r from-sky-400 to-purple-400 bg-clip-text text-transparent">15+</span>
                 </p>
                 <p className="text-sm text-zinc-400">Projects Delivered</p>
-                <p className="text-xs text-zinc-500">Across 20+ Countries</p>
+{/*                 <p className="text-xs text-zinc-500">Across 20+ Countries</p> */}
               </div>
             </div>
           </div>

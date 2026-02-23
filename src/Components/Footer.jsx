@@ -193,7 +193,7 @@ const Footer = () => {
                 <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/10 shadow-2xl">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 opacity-20" />
                   <img
-                      src={process.env.PUBLIC_URL + '/images/mahendra2.png'}
+                      src={process.env.PUBLIC_URL + '/images/mahendra30.png'}
                     alt="Mahendra Gurjar"
                     className="w-full h-full object-cover"
                     onError={(e) => {
