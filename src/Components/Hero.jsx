@@ -204,8 +204,8 @@ const Hero = () => {
            {/* CTA Buttons */}
            <div className="flex flex-wrap items-center gap-4 pt-4">
              <a
-               href={process.env.PUBLIC_URL + '/documents/Mahendra-Gurjar-Resume.pdf'}
-               download="Mahendra-Gurjar-Resume.pdf"
+               href={process.env.PUBLIC_URL + '/documents/Mahendra_Gurjar_Resume.pdf'}
+               download="Mahendra_Gurjar_Resume.pdf"
                className="group relative px-6 py-3 rounded-lg font-medium overflow-hidden"
              >
                <div className="absolute inset-0 bg-gradient-to-r from-sky-500 to-purple-500 transition-transform duration-500 group-hover:scale-110"></div>
