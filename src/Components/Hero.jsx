@@ -10,7 +10,7 @@ const Hero = () => {
   const heroRef = useRef(null);
   const floatingRef = useRef(null);
 
-  const fullText = "Senior Flutter Developer";
+  const fullText = "Flutter Developer";
 
   useEffect(() => {
     // Infinity Typewriter Effect
