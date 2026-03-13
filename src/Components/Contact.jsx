@@ -541,7 +541,7 @@ const ContactMe = () => {
           background-size: 300% 300%;
           animation: gradient 8s ease infinite;
         }
-        .bg-300\% {
+        .bg-300% {
           background-size: 300% 300%;
         }
       `}</style>

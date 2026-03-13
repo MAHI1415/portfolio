@@ -87,22 +87,22 @@ const CursorGlow = () => {
   );
 };
 
+// Code snippets for particles
+const codeSnippets = [
+  '{ }', '< />', '() =>', 'const', 'let',
+  'npm', 'git', 'dev', 'react', 'flutter',
+  '<div>', '</div>', '=>', '{}', '[]',
+  'JSX', 'CSS', 'HTML', 'API', 'JSON',
+  'useState', 'useEffect', 'props', 'state',
+  'Flutter', 'Widget', 'Container', 'Row', 'Column'
+];
+
 // Background Digital Animation Component - EXACTLY as it was working
 const BackgroundDigitalAnimation = () => {
   const containerRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState([]);
   const [connections, setConnections] = useState([]);
-
-  // Code snippets for particles
-  const codeSnippets = [
-    '{ }', '< />', '() =>', 'const', 'let',
-    'npm', 'git', 'dev', 'react', 'flutter',
-    '<div>', '</div>', '=>', '{}', '[]',
-    'JSX', 'CSS', 'HTML', 'API', 'JSON',
-    'useState', 'useEffect', 'props', 'state',
-    'Flutter', 'Widget', 'Container', 'Row', 'Column'
-  ];
 
   useEffect(() => {
     // Initialize particles
