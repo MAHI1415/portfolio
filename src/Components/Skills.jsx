@@ -6,10 +6,22 @@ import {
   SiFirebase,
   SiAndroidstudio,
   SiPostman,
-  SiGit
+  SiGit,
+  SiGithubactions,
+  SiSupabase,
+  SiFigma,
+  SiAdobexd,
+  SiGithub,
+  SiGitlab
 } from 'react-icons/si';
 import { TbApi } from 'react-icons/tb';
-import { FaHtml5, FaCss3Alt, FaJsSquare, FaReact } from 'react-icons/fa';
+import { FaApple, FaGooglePlay } from 'react-icons/fa';
+import { VscCode } from 'react-icons/vsc';
+import { MdDeveloperMode } from 'react-icons/md';
+import { BsFillDatabaseFill } from 'react-icons/bs';
+import { HiOutlineColorSwatch } from 'react-icons/hi';
+import { DiGoogleAnalytics } from 'react-icons/di';
+import { GiTestTubes } from 'react-icons/gi';
 
 const Skills = () => {
   const sectionRef = React.useRef(null);
@@ -58,64 +70,133 @@ const Skills = () => {
       icon: "💻",
       gradient: "from-sky-400 to-blue-500",
       skills: [
-        { name: "Dart", icon: SiDart, level: 95, color: "text-sky-400" },
-        { name: "C", icon: null, level: 75, color: "text-blue-400" },
-        { name: "JavaScript", icon: FaJsSquare, level: 85, color: "text-yellow-500" },
-        { name: "C++", icon: null, level: 75, color: "text-blue-600" },
-      ]
-    },
-    {
-      title: "Mobile Development",
-      icon: "📱",
-      gradient: "from-purple-400 to-pink-500",
-      skills: [
         { name: "Flutter", icon: SiFlutter, level: 98, color: "text-sky-400" },
         { name: "Dart", icon: SiDart, level: 95, color: "text-sky-400" },
-        { name: "Android Studio", icon: SiAndroidstudio, level: 92, color: "text-green-500" },
-        { name: "Firebase", icon: SiFirebase, level: 90, color: "text-yellow-500" }
+        { name: "JavaScript", icon: null, level: 85, color: "text-yellow-500" },
       ]
     },
     {
       title: "State Management",
       icon: "⚙️",
-      gradient: "from-green-400 to-emerald-500",
+      gradient: "from-purple-400 to-pink-500",
       skills: [
-        { name: "BLoC", icon: null, level: 98, color: "text-blue-400" },
+        { name: "BLoC", icon: null, level: 98, color: "text-purple-400" },
+        { name: "Riverpod", icon: null, level: 95, color: "text-pink-400" },
         { name: "GetX", icon: null, level: 98, color: "text-blue-400" },
-        { name: "Provider", icon: null, level: 92, color: "text-purple-400" },
-        { name: "Riverpod", icon: null, level: 88, color: "text-pink-400" }
+        { name: "Provider", icon: null, level: 92, color: "text-green-400" }
       ]
     },
     {
-      title: "Backend & APIs",
+      title: "Architecture",
+      icon: "🏗️",
+      gradient: "from-green-400 to-emerald-500",
+      skills: [
+        { name: "MVVM", icon: null, level: 95, color: "text-green-400" },
+        { name: "Clean Arch", icon: null, level: 92, color: "text-emerald-400" },
+        { name: "Repository", icon: null, level: 90, color: "text-teal-400" }
+      ]
+    },
+    {
+      title: "APIs & Backend",
       icon: "🔌",
       gradient: "from-yellow-400 to-orange-500",
       skills: [
         { name: "REST APIs", icon: TbApi, level: 95, color: "text-purple-400" },
-        { name: "Firebase", icon: SiFirebase, level: 90, color: "text-yellow-500" },
+        { name: "Firebase", icon: SiFirebase, level: 92, color: "text-yellow-500" },
+        { name: "Supabase", icon: SiSupabase, level: 85, color: "text-green-500" }
       ]
     },
     {
-      title: "Web Technologies",
-      icon: "🌐",
+      title: "CI/CD & DevOps",
+      icon: "🚀",
       gradient: "from-red-400 to-rose-500",
       skills: [
-        { name: "HTML5", icon: FaHtml5, level: 85, color: "text-orange-500" },
-        { name: "CSS3", icon: FaCss3Alt, level: 85, color: "text-blue-500" },
-        { name: "JavaScript", icon: FaJsSquare, level: 85, color: "text-yellow-500" },
-        { name: "React", icon: FaReact, level: 75, color: "text-sky-400" }
+        { name: "GitHub Actions", icon: SiGithubactions, level: 88, color: "text-gray-400" },
+        { name: "Codemagic", icon: null, level: 85, color: "text-blue-400" },
+        { name: "Git", icon: SiGit, level: 92, color: "text-orange-500" }
       ]
     },
     {
-      title: "Tools & Platforms",
-      icon: "🛠️",
+      title: "Databases",
+      icon: "🗄️",
       gradient: "from-indigo-400 to-purple-500",
       skills: [
-        { name: "VS Code", icon: null, level: 95, color: "text-blue-400" },
-        { name: "Android Studio", icon: SiAndroidstudio, level: 92, color: "text-green-500" },
-        { name: "Git", icon: SiGit, level: 90, color: "text-orange-500" },
+        { name: "NoSQL", icon: BsFillDatabaseFill, level: 90, color: "text-indigo-400" },
+        { name: "Firebase", icon: SiFirebase, level: 92, color: "text-yellow-500" }
+      ]
+    },
+    {
+      title: "Design",
+      icon: "🎨",
+      gradient: "from-pink-400 to-rose-500",
+      skills: [
+        { name: "Material Design", icon: HiOutlineColorSwatch, level: 95, color: "text-blue-400" },
+        { name: "Android SDK", icon: SiAndroidstudio, level: 90, color: "text-green-500" }
+      ]
+    },
+    {
+      title: "Testing",
+      icon: "🧪",
+      gradient: "from-cyan-400 to-teal-500",
+      skills: [
+        { name: "Unit Test", icon: GiTestTubes, level: 88, color: "text-cyan-400" },
+        { name: "Widget Test", icon: GiTestTubes, level: 85, color: "text-teal-400" },
+        { name: "Integration", icon: GiTestTubes, level: 82, color: "text-emerald-400" }
+      ]
+    },
+    {
+      title: "IDE",
+      icon: "🖥️",
+      gradient: "from-blue-400 to-indigo-500",
+      skills: [
+        { name: "VS Code", icon: VscCode, level: 98, color: "text-blue-400" },
+        { name: "Android Studio", icon: SiAndroidstudio, level: 95, color: "text-green-500" }
+      ]
+    },
+    {
+      title: "Version Control",
+      icon: "📦",
+      gradient: "from-gray-400 to-gray-600",
+      skills: [
+        { name: "Git", icon: SiGit, level: 95, color: "text-orange-500" },
+        { name: "GitHub", icon: SiGithub, level: 94, color: "text-gray-300" },
+        { name: "GitLab", icon: SiGitlab, level: 90, color: "text-orange-500" }
+      ]
+    },
+    {
+      title: "Design Tools",
+      icon: "✏️",
+      gradient: "from-fuchsia-400 to-pink-500",
+      skills: [
+        { name: "Figma", icon: SiFigma, level: 85, color: "text-purple-400" },
+        { name: "Adobe XD", icon: SiAdobexd, level: 80, color: "text-pink-400" }
+      ]
+    },
+    {
+      title: "API Testing",
+      icon: "🛠️",
+      gradient: "from-amber-400 to-orange-500",
+      skills: [
         { name: "Postman", icon: SiPostman, level: 92, color: "text-orange-500" },
-        { name: "Windows", icon: null, level: 95, color: "text-blue-400" }
+        { name: "DIO Inspector", icon: null, level: 90, color: "text-blue-400" }
+      ]
+    },
+    {
+      title: "Monitoring",
+      icon: "📊",
+      gradient: "from-lime-400 to-green-500",
+      skills: [
+        { name: "Firebase Crashlytics", icon: DiGoogleAnalytics, level: 88, color: "text-yellow-500" },
+        { name: "DevTools", icon: MdDeveloperMode, level: 92, color: "text-purple-400" }
+      ]
+    },
+    {
+      title: "Deployment",
+      icon: "📱",
+      gradient: "from-violet-400 to-purple-500",
+      skills: [
+        { name: "Play Console", icon: FaGooglePlay, level: 85, color: "text-green-500" },
+        { name: "App Store", icon: FaApple, level: 80, color: "text-gray-300" }
       ]
     }
   ];
