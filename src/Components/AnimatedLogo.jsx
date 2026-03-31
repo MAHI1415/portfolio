@@ -1,137 +1,168 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 const AnimatedLogo = () => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [, setRotation] = useState(0);
+  const canvasRef = useRef(null);
+  const animRef = useRef(null);
+  const mouseRef = useRef({ x: 0, y: 0, hovering: false });
 
   useEffect(() => {
-    let interval;
-    if (isHovered) {
-      interval = setInterval(() => {
-        setRotation(prev => (prev + 1) % 360);
-      }, 20);
-    }
-    return () => clearInterval(interval);
-  }, [isHovered]);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const SIZE = 56;
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+
+    let t = 0;
+
+    const handleMouseEnter = () => { mouseRef.current.hovering = true; };
+    const handleMouseLeave = () => { mouseRef.current.hovering = false; };
+    canvas.addEventListener('mouseenter', handleMouseEnter);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
+
+    const draw = () => {
+      ctx.clearRect(0, 0, SIZE, SIZE);
+      t += 0.03;
+
+      const isHovered = mouseRef.current.hovering;
+      const speed = isHovered ? 0.06 : 0.02;
+      
+      const cx = SIZE / 2;
+      const cy = SIZE / 2;
+      const R = 22;
+
+      // === OUTER SPINNING NEON RING ===
+      const ringGrad = ctx.createLinearGradient(0, 0, SIZE, SIZE);
+      ringGrad.addColorStop(0, `hsl(${(t * 80) % 360}, 100%, 65%)`);
+      ringGrad.addColorStop(0.5, `hsl(${(t * 80 + 120) % 360}, 100%, 65%)`);
+      ringGrad.addColorStop(1, `hsl(${(t * 80 + 240) % 360}, 100%, 65%)`);
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.strokeStyle = ringGrad;
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = `hsl(${(t * 80) % 360}, 100%, 65%)`;
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // === INNER SPINNING DASHED RING ===
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(t * 1.5);
+      ctx.translate(-cx, -cy);
+      ctx.beginPath();
+      ctx.setLineDash([4, 5]);
+      ctx.arc(cx, cy, R - 6, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(168, 85, 247, ${0.4 + 0.3 * Math.sin(t * 2)})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      // === ORBITING DOTS (3 dots spinning around) ===
+      for (let i = 0; i < 3; i++) {
+        const angle = t * 2 + (i * Math.PI * 2) / 3;
+        const ox = cx + Math.cos(angle) * (R - 3);
+        const oy = cy + Math.sin(angle) * (R - 3);
+        const dotColor = i === 0 ? '#38bdf8' : i === 1 ? '#a855f7' : '#ec4899';
+
+        ctx.beginPath();
+        ctx.arc(ox, oy, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = dotColor;
+        ctx.shadowColor = dotColor;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // === CENTER BACKGROUND ===
+      const bgGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, R - 8);
+      bgGrad.addColorStop(0, 'rgba(30, 10, 60, 0.95)');
+      bgGrad.addColorStop(1, 'rgba(9, 9, 11, 0.90)');
+      ctx.beginPath();
+      ctx.arc(cx, cy, R - 8, 0, Math.PI * 2);
+      ctx.fillStyle = bgGrad;
+      ctx.fill();
+
+      // === "MG" TEXT - 3D LAYERED GLOW ===
+      const pulse = isHovered ? 1.15 : (1 + 0.05 * Math.sin(t * 3));
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(pulse, pulse);
+      ctx.translate(-cx, -cy);
+      ctx.font = `bold 16px "Inter", "Arial", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Shadow layers for 3D depth
+      const textColors = [
+        { color: '#1e1b4b', offsetY: 3, blur: 0 },
+        { color: '#3730a3', offsetY: 2, blur: 0 },
+        { color: '#a855f7', offsetY: 1, blur: 4 },
+      ];
+      textColors.forEach(({ color, offsetY, blur }) => {
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = blur;
+        ctx.fillText('MG', cx, cy + offsetY);
+      });
+
+      // Main bright text
+      const textGrad = ctx.createLinearGradient(cx - 12, cy - 8, cx + 12, cy + 8);
+      textGrad.addColorStop(0, '#e0f2fe'); // bright white-blue
+      textGrad.addColorStop(0.5, '#c4b5fd'); // light purple
+      textGrad.addColorStop(1, '#f0abfc'); // pink
+      ctx.fillStyle = textGrad;
+      ctx.shadowColor = '#a855f7';
+      ctx.shadowBlur = isHovered ? 15 : 8;
+      ctx.fillText('MG', cx, cy);
+      ctx.shadowBlur = 0;
+      ctx.restore();
+
+      // === CORNER SPARKLES (appear on hover) ===
+      if (isHovered) {
+        const sparkles = [
+          { x: cx - 18, y: cy - 18 },
+          { x: cx + 18, y: cy - 18 },
+          { x: cx - 18, y: cy + 18 },
+          { x: cx + 18, y: cy + 18 },
+        ];
+        sparkles.forEach((s, i) => {
+          const alpha = (Math.sin(t * 5 + i * 1.5) + 1) / 2;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(56, 189, 248, ${alpha})`;
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 6;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+      }
+
+      animRef.current = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      canvas.removeEventListener('mouseenter', handleMouseEnter);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
 
   return (
-    <div
-      className="relative w-11 h-11 cursor-pointer group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Animated Background Rings */}
-      <div className="absolute inset-0">
-        {/* Outer Ring */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-sky-500/20 to-purple-500/20 animate-ping opacity-75"></div>
-
-        {/* Middle Ring */}
-        <div className="absolute inset-1 rounded-full bg-gradient-to-r from-sky-500/30 to-purple-500/30 blur-sm"></div>
-
-        {/* Inner Ring */}
-        <div className="absolute inset-2 rounded-full bg-gradient-to-r from-sky-500/40 to-purple-500/40 blur-md"></div>
-      </div>
-
-      {/* Main Logo Container */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-full h-full flex items-center justify-center">
-
-          {/* Geometric Background */}
-          <div className="absolute w-8 h-8 bg-gradient-to-br from-sky-500 to-purple-500 rounded-lg transform rotate-45 group-hover:rotate-90 transition-transform duration-500"></div>
-
-          {/* Circuit Lines */}
-          <svg className="absolute w-10 h-10" viewBox="0 0 40 40">
-            <path
-              d="M8 20 L32 20 M20 8 L20 32 M12 12 L28 28 M12 28 L28 12"
-              stroke="url#grad1"
-              strokeWidth="1.5"
-              strokeDasharray="4 4"
-              className="animate-dash"
-              style={{ stroke: 'url(#grad1)' }}
-            >
-              <animate
-                attributeName="stroke-dashoffset"
-                values="0;100"
-                dur="3s"
-                repeatCount="indefinite"
-              />
-            </path>
-
-            {/* Dots at intersections */}
-            <circle cx="20" cy="20" r="2" fill="white" className="animate-pulse">
-              <animate
-                attributeName="r"
-                values="2;3;2"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-            </circle>
-
-            <circle cx="8" cy="20" r="1.5" fill="#0ea5e9" className="animate-ping" />
-            <circle cx="32" cy="20" r="1.5" fill="#a855f7" className="animate-ping" style={{ animationDelay: '0.5s' }} />
-            <circle cx="20" cy="8" r="1.5" fill="#0ea5e9" className="animate-ping" style={{ animationDelay: '1s' }} />
-            <circle cx="20" cy="32" r="1.5" fill="#a855f7" className="animate-ping" style={{ animationDelay: '1.5s' }} />
-
-            <defs>
-              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0ea5e9">
-                  <animate
-                    attributeName="stop-color"
-                    values="#0ea5e9;#a855f7;#0ea5e9"
-                    dur="4s"
-                    repeatCount="indefinite"
-                  />
-                </stop>
-                <stop offset="100%" stopColor="#a855f7">
-                  <animate
-                    attributeName="stop-color"
-                    values="#a855f7;#0ea5e9;#a855f7"
-                    dur="4s"
-                    repeatCount="indefinite"
-                  />
-                </stop>
-              </linearGradient>
-            </defs>
-          </svg>
-
-          {/* MG Text with 3D Effect */}
-          <div className="relative z-10 flex items-center justify-center space-x-0.5">
-            {/* M Letter */}
-            <div className="relative group/m">
-              <span className="text-2xl font-black text-transparent bg-gradient-to-r from-sky-400 to-purple-400 bg-clip-text transform group-hover:scale-110 transition-transform duration-300 inline-block">
-                M
-              </span>
-              {/* M Glow */}
-              <div className="absolute inset-0 blur-lg bg-gradient-to-r from-sky-500 to-purple-500 opacity-0 group-hover:opacity-50 transition-opacity"></div>
-            </div>
-
-            {/* G Letter */}
-            <div className="relative group/g">
-              <span className="text-2xl font-black text-transparent bg-gradient-to-r from-purple-400 to-sky-400 bg-clip-text transform group-hover:scale-110 transition-transform duration-300 inline-block">
-                G
-              </span>
-              {/* G Glow */}
-              <div className="absolute inset-0 blur-lg bg-gradient-to-r from-purple-500 to-sky-500 opacity-0 group-hover:opacity-50 transition-opacity"></div>
-            </div>
-          </div>
-
-          {/* Floating Particles */}
-          <div className="absolute -inset-4 pointer-events-none">
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-1 h-1 bg-sky-500 rounded-full animate-float-particle"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${i * 0.5}s`,
-                  animationDuration: `${3 + i}s`
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+    <div style={{ position: 'relative', width: 56, height: 56, cursor: 'pointer' }}>
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: 56,
+          height: 56,
+          borderRadius: '50%',
+          display: 'block',
+        }}
+      />
     </div>
   );
 };

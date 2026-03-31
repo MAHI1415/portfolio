@@ -75,7 +75,7 @@ const Hero = () => {
     <section
       ref={heroRef}
       id="home"
-      className="relative min-h-screen w-full overflow-hidden bg-zinc-900 py-20 lg:py-24"
+      className="relative min-h-screen w-full overflow-hidden bg-transparent py-20 lg:py-24"
     >
       {/* Background Elements */}
       <div className="absolute inset-0">

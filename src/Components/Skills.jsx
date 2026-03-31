@@ -226,7 +226,7 @@ const Skills = () => {
     <section
       id="skills"
       ref={sectionRef}
-      className="relative min-h-screen w-full bg-gradient-to-b from-zinc-900 via-zinc-900 to-zinc-950 text-zinc-50 py-20 lg:py-24 overflow-hidden"
+      className="relative min-h-screen w-full bg-transparent text-zinc-50 py-20 lg:py-24 overflow-hidden"
     >
       {/* Animated Background Elements */}
       <div className="fixed inset-0 pointer-events-none">

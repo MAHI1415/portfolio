@@ -10,6 +10,7 @@ import Skills from "./Skills";
 import ContactMe from "./Contact";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import AnimatedBackground from "./AnimatedBackground";
 
 const App = () =>{
     useEffect(() => {
@@ -21,13 +22,14 @@ const App = () =>{
 
     return(
         <BrowserRouter>
-            <div>
+            <div className="relative">
+                <AnimatedBackground />
                 <Header />
-                <main>
+                <main className="relative z-10">
                     <div data-aos="fade-up">
                         <Hero/>
                     </div>
-                    <div className="bg-zinc-900 text-zinc-50 min-h-screen" data-aos="fade-right">
+                    <div className="bg-transparent text-zinc-50 min-h-screen" data-aos="fade-right">
                         <About />
                     </div>
                     {/* <Experience /> */}

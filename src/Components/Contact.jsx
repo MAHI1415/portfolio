@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -36,14 +38,21 @@ const ContactMe = () => {
     e.preventDefault();
     setFormStatus('submitting');
 
-    // Simulate form submission (replace with actual API call)
-    setTimeout(() => {
+    try {
+      await addDoc(collection(db, "contacts"), {
+        ...formData,
+        createdAt: serverTimestamp()
+      });
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
 
       // Reset success message after 5 seconds
       setTimeout(() => setFormStatus('idle'), 5000);
-    }, 2000);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      setFormStatus('error');
+      setTimeout(() => setFormStatus('idle'), 5000);
+    }
   };
 
 //   // Animation variants
@@ -131,7 +140,7 @@ const ContactMe = () => {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative min-h-screen w-full bg-gradient-to-b from-zinc-900 via-zinc-900 to-zinc-950 text-white py-20 lg:py-24 overflow-hidden"
+      className="relative min-h-screen w-full bg-transparent text-white py-20 lg:py-24 overflow-hidden"
     >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none">

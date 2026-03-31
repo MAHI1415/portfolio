@@ -97,245 +97,8 @@ const codeSnippets = [
   'Flutter', 'Widget', 'Container', 'Row', 'Column'
 ];
 
-// Background Digital Animation Component - EXACTLY as it was working
-const BackgroundDigitalAnimation = () => {
-  const containerRef = useRef(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState([]);
-  const [connections, setConnections] = useState([]);
-
-  useEffect(() => {
-    // Initialize particles
-    const newParticles = [];
-    for (let i = 0; i < 40; i++) {
-      newParticles.push({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: 14 + Math.random() * 20,
-        speedX: (Math.random() - 0.5) * 0.15,
-        speedY: (Math.random() - 0.5) * 0.15,
-        text: codeSnippets[Math.floor(Math.random() * codeSnippets.length)],
-        color: i % 3 === 0 ? '#a855f7' : i % 3 === 1 ? '#ec4899' : '#06b6d4',
-        opacity: 0.2 + Math.random() * 0.3,
-        rotation: Math.random() * 360,
-        rotationSpeed: (Math.random() - 0.5) * 0.2
-      });
-    }
-    setParticles(newParticles);
-
-    // Animation loop
-    const interval = setInterval(() => {
-      setParticles(prev => prev.map(p => {
-        const newX = p.x + p.speedX;
-        const newY = p.y + p.speedY;
-
-        return {
-          ...p,
-          x: newX > 100 ? 0 : newX < 0 ? 100 : newX,
-          y: newY > 100 ? 0 : newY < 0 ? 100 : newY,
-          rotation: p.rotation + p.rotationSpeed
-        };
-      }));
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Calculate connections between nearby particles
-  useEffect(() => {
-    const newConnections = [];
-    const connectionDistance = 25;
-
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const p1 = particles[i];
-        const p2 = particles[j];
-        const dx = p1.x - p2.x;
-        const dy = p1.y - p2.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < connectionDistance) {
-          // Check if near mouse to make connection glow brighter
-          let isNearMouse = false;
-          if (mousePosition.x !== 0 && mousePosition.y !== 0) {
-            const avgX = (p1.x + p2.x) / 2;
-            const avgY = (p1.y + p2.y) / 2;
-            const mouseDx = avgX - mousePosition.x;
-            const mouseDy = avgY - mousePosition.y;
-            const mouseDist = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
-            isNearMouse = mouseDist < 20;
-          }
-
-          newConnections.push({
-            id: `${i}-${j}`,
-            x1: p1.x,
-            y1: p1.y,
-            x2: p2.x,
-            y2: p2.y,
-            opacity: isNearMouse ? 0.6 : 0.2 - (distance / connectionDistance) * 0.15,
-            width: isNearMouse ? 2 : 1
-          });
-        }
-      }
-    }
-    setConnections(newConnections);
-  }, [particles, mousePosition]);
-
-  // Handle mouse movement for subtle influence
-  const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePosition({ x, y });
-
-    // Subtle mouse influence on nearby particles
-    setParticles(prev => prev.map(p => {
-      const dx = p.x - x;
-      const dy = p.y - y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < 15) {
-        return {
-          ...p,
-          x: p.x + (dx > 0 ? 0.5 : -0.5) * Math.random(),
-          y: p.y + (dy > 0 ? 0.5 : -0.5) * Math.random()
-        };
-      }
-      return p;
-    }));
-  };
-
-  return (
-    <motion.div
-      ref={containerRef}
-      className="absolute inset-0 w-full h-full overflow-hidden"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => setMousePosition({ x: 0, y: 0 })}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.5 }}
-    >
-      {/* Animated grid lines */}
-      <svg className="absolute inset-0 w-full h-full opacity-15">
-        <defs>
-          <pattern id="smallGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(168,85,247,0.15)" strokeWidth="0.5" />
-          </pattern>
-          <pattern id="grid" width="160" height="160" patternUnits="userSpaceOnUse">
-            <rect width="160" height="160" fill="url(#smallGrid)" />
-            <path d="M 160 0 L 0 0 0 160" fill="none" stroke="rgba(236,72,153,0.2)" strokeWidth="1" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-      </svg>
-
-      {/* Connection Lines */}
-      <svg className="absolute inset-0 w-full h-full">
-        <defs>
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#ec4899" stopOpacity="0.8" />
-          </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-        {connections.map(conn => (
-          <motion.line
-            key={conn.id}
-            x1={`${conn.x1}%`}
-            y1={`${conn.y1}%`}
-            x2={`${conn.x2}%`}
-            y2={`${conn.y2}%`}
-            stroke="url(#lineGradient)"
-            strokeWidth={conn.width}
-            strokeOpacity={conn.opacity}
-            filter="url(#glow)"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: conn.opacity }}
-            transition={{ duration: 0.5 }}
-          />
-        ))}
-      </svg>
-
-      {/* Floating particles */}
-      {particles.map(particle => (
-        <motion.div
-          key={particle.id}
-          className="absolute transform -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`,
-            rotate: particle.rotation,
-            opacity: particle.opacity
-          }}
-          animate={{
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          whileHover={{
-            scale: 1.5,
-            transition: { duration: 0.2 }
-          }}
-        >
-          <span
-            className="text-sm md:text-base font-mono font-bold whitespace-nowrap"
-            style={{
-              color: particle.color,
-              textShadow: `0 0 8px ${particle.color}`,
-            }}
-          >
-            {particle.text}
-          </span>
-        </motion.div>
-      ))}
-
-      {/* Central pulse effect */}
-      <motion.div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-gradient-to-r from-purple-600/10 to-pink-600/10 blur-2xl"
-        animate={{
-          scale: [1, 1.5, 1],
-          opacity: [0.1, 0.2, 0.1],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-
-      {/* Mouse follower glow */}
-      {mousePosition.x !== 0 && mousePosition.y !== 0 && (
-        <motion.div
-          className="absolute w-32 h-32 rounded-full pointer-events-none"
-          style={{
-            left: mousePosition.x - 16,
-            top: mousePosition.y - 16,
-            background: 'radial-gradient(circle, rgba(168,85,247,0.15) 0%, transparent 70%)',
-            filter: 'blur(10px)',
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      )}
-    </motion.div>
-  );
-};
+// Removed heavy particle system to drastically improve performance 
+const BackgroundDigitalAnimation = () => null;
 
 // Project Modal Component
 const ProjectModal = ({ project, isOpen, onClose }) => {
@@ -804,7 +567,7 @@ const Projects = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/30 to-gray-950 text-white font-['Inter',sans-serif] relative overflow-x-hidden">
+    <div className="min-h-screen bg-transparent text-white font-['Inter',sans-serif] relative overflow-x-hidden">
       {/* Custom Cursor Glow */}
       <CursorGlow />
 
@@ -933,9 +696,11 @@ const Projects = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/20 group-hover:to-pink-600/20 transition-all duration-500 rounded-xl blur opacity-0 group-hover:opacity-100" />
 
                 <div className="relative h-56 overflow-hidden">
-                  <img
+                 <img
                     src={process.env.PUBLIC_URL + project.image}
                     alt={project.title}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />

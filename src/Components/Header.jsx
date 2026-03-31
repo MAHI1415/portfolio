@@ -60,11 +60,14 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ${
         scrolled
-          ? 'bg-zinc-900/90 backdrop-blur-xl shadow-lg shadow-purple-500/5'
-          : 'bg-transparent backdrop-blur-sm'
+          ? 'bg-zinc-950/80 backdrop-blur-2xl shadow-2xl shadow-purple-900/20'
+          : 'bg-transparent'
       }`}
+      style={scrolled ? {
+        borderBottom: '1px solid rgba(168, 85, 247, 0.2)',
+      } : {}}
     >
       <div className='max-w-screen-2xl w-full mx-auto px-4 h-20 flex items-center justify-between md:px-8'>
 
