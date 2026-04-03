@@ -109,7 +109,7 @@ const Navbar = ({ navOpen }) => {
     {
       label: 'About',
       link: '#about',
-      icon: 'info',
+      icon: 'person',
     },
     {
       label: 'Skills',
@@ -120,6 +120,11 @@ const Navbar = ({ navOpen }) => {
       label: 'Projects',
       link: '#projects',
       icon: 'work',
+    },
+    {
+      label: 'Packages',
+      link: '#packages',
+      icon: 'inventory_2',
     },
     {
       label: 'Contact',

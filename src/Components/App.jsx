@@ -5,6 +5,7 @@ import Header from "./Header";
 import Hero from "./Hero";
 import About from "./About";
 import Projects from "./Projects";
+import Packages from "./Packages";
 import Footer from "./Footer";
 import Skills from "./Skills";
 import ContactMe from "./Contact";
@@ -22,7 +23,7 @@ const App = () =>{
 
     return(
         <BrowserRouter>
-            <div className="relative">
+            <div className="relative overflow-x-hidden">
                 <AnimatedBackground />
                 <Header />
                 <main className="relative z-10">
@@ -37,6 +38,9 @@ const App = () =>{
                         <Skills/>
                     </div>
                     <Projects />
+                    <div data-aos="flip-left">
+                        <Packages />
+                    </div>
                     <ContactMe />
                 </main>
                 <Footer />
